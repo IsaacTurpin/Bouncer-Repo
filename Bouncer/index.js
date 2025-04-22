@@ -22,7 +22,7 @@ class Ball
 {
     x = 0;
     y = 0;
-    dx = 4;
+    dx = 5;
     dy = 5;
 
     constructor()
@@ -83,23 +83,40 @@ for(let i = 0; i < maxBalls; i++)
 
 function detectCollision(b1, b2)
 {
-    const d = Math.sqrt((b1.x - b2.x) **2 + (b1.y - b2.y) **2);
+    const d = getSqrt(b1, b2);
     if(d < b1.radius + b2.radius)
     {
-        console.log("BOOM!");
-        if(b1.radius <= 2 || b2.radius <= 2)
+        if(b1.radius <= 5 || b2.radius <= 5)
         {
-            b1.radius = 2;
-            b2.radius = 2;
+            b1.radius = 5;
+            b2.radius = 5;
         }
         else
         {
             b1.radius /= 2;
             b2.radius /= 2;
         }
-
     }
+}
 
+function drawLines(b1, b2)
+{
+    const d = getSqrt(b1, b2);
+    if(d < 200)
+    {
+        const strokeStyle = `rgba(255, 255, 255, ${1 - d / 200})`;
+        view.strokeStyle = strokeStyle;
+
+        view.beginPath();
+        view.moveTo(b1.x, b1.y);
+        view.lineTo(b2.x, b2.y);
+        view.stroke();
+    }
+}
+
+function getSqrt(b1, b2)
+{
+    return Math.sqrt((b1.x - b2.x) **2 + (b1.y - b2.y) **2);
 }
 
 function animate()
@@ -117,6 +134,7 @@ function animate()
         for(let j = i +1; j < balls.length; j++)
         {
             detectCollision(balls[i], balls[j]);
+            drawLines(balls[i], balls[j]);
         }
     }
 
