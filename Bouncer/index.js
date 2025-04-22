@@ -74,7 +74,7 @@ class Ball
     }
 }
 
-const maxBalls = 2;
+const maxBalls = 100;
 const balls = [];
 for(let i = 0; i < maxBalls; i++)
 {
@@ -87,8 +87,17 @@ function detectCollision(b1, b2)
     if(d < b1.radius + b2.radius)
     {
         console.log("BOOM!");
-        b1.radius /= 2;
-        b2.radius /= 2;
+        if(b1.radius <= 2 || b2.radius <= 2)
+        {
+            b1.radius = 2;
+            b2.radius = 2;
+        }
+        else
+        {
+            b1.radius /= 2;
+            b2.radius /= 2;
+        }
+
     }
 
 }
@@ -101,7 +110,16 @@ function animate()
     //     element.Draw();
     // });
 
-    detectCollision(balls[0], balls[1]);
+    //detectCollision(balls[0], balls[1]);
+
+    for(let i =0; i < balls.length; i++)
+    {
+        for(let j = i +1; j < balls.length; j++)
+        {
+            detectCollision(balls[i], balls[j]);
+        }
+    }
+
     for (const b of balls) b.Draw();
 
     //b2.Draw();
